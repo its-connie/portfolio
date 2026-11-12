@@ -1,0 +1,84 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectDetail from "../components/ProjectDetail.astro";
+import { projects } from "../data/projects.js";
+---
+<Base title="Work | Connie Trinh" description="Selected projects in landscape, infrastructure, and public space.">
+  <section class="page-intro">
+    <h1>Work</h1>
+    <p>Selected projects in landscape architecture, civil engineering, and public art. Select a project to see more.</p>
+  </section>
+
+  <ul class="project-grid">
+    {projects.map((project) => (
+      <li>
+        <a class="project-card" href={`/work/${project.slug}`} data-project={project.slug}>
+          {project.cover ? (
+            <img src={project.cover} alt={project.coverAlt} loading="lazy" />
+          ) : (
+            <div class="placeholder" aria-hidden="true">Image coming soon</div>
+          )}
+          <h2 class="card-title">{project.title}</h2>
+          <p class="card-summary">{project.summary}</p>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <!-- Pop-up. Without JavaScript, each card links to its own project page instead. -->
+  <dialog id="project-dialog" class="project-dialog">
+    <div class="dialog-inner">
+      <form method="dialog" class="dialog-close-form">
+        <button class="button-secondary" type="submit">Close</button>
+      </form>
+      <div id="project-dialog-body"></div>
+    </div>
+  </dialog>
+
+  {projects.map((project) => (
+    <template id={`tpl-${project.slug}`}>
+      <ProjectDetail project={project} />
+    </template>
+  ))}
+</Base>
+
+<script>
+  const dialog = document.getElementById("project-dialog");
+  const body = document.getElementById("project-dialog-body");
+  let trigger = null;
+
+  function openProject(link) {
+    const template = document.getElementById(`tpl-${link.dataset.project}`);
+    if (!template || !dialog || !body) return false;
+
+    body.replaceChildren(template.content.cloneNode(true));
+    const title = body.querySelector(".project-title")?.textContent ?? "";
+    dialog.setAttribute("aria-label", title);
+    dialog.querySelector(".dialog-inner").scrollTop = 0;
+
+    trigger = link;
+    dialog.showModal();
+    document.documentElement.classList.add("dialog-open");
+    return true;
+  }
+
+  document.querySelectorAll("a[data-project]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      // Let modified clicks (new tab, etc.) follow the normal link.
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (openProject(link)) event.preventDefault();
+    });
+  });
+
+  // Close when the visitor clicks the dimmed area outside the panel.
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  // Escape, the Close button, and the backdrop all end up here.
+  dialog?.addEventListener("close", () => {
+    document.documentElement.classList.remove("dialog-open");
+    trigger?.focus();
+    trigger = null;
+  });
+</script>

@@ -1,0 +1,57 @@
+---
+import "../styles/global.css";
+
+const {
+  title,
+  description = "Connie Trinh: designer working across landscape, infrastructure, and climate resilience.",
+} = Astro.props;
+
+// Edit this list to change the navigation.
+const navItems = [
+  { href: "/work", label: "Work" },
+  { href: "/about", label: "About" },
+  { href: "/writing", label: "Writing" },
+  { href: "/cv", label: "CV" },
+  { href: "/contact", label: "Contact" },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href) => path === href || path.startsWith(href + "/");
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-name" href="/">Connie Trinh</a>
+        <nav aria-label="Main">
+          <ul class="nav-list">
+            {navItems.map((item) => (
+              <li>
+                <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="container">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© {new Date().getFullYear()} Connie Trinh</p>
+      </div>
+    </footer>
+  </body>
+</html>

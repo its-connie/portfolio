@@ -1,0 +1,32 @@
+---
+// Shared project content, used in the Work pop-up and on each project's own page.
+// heading: "h2" inside the pop-up, "h1" on the project page.
+const { project, heading = "h2" } = Astro.props;
+const Heading = heading;
+---
+<article class="project">
+  <p class="eyebrow">{project.year} · {project.role}</p>
+  <Heading class="project-title">{project.title}</Heading>
+  <p class="lead">{project.summary}</p>
+
+  {
+    project.cover ? (
+      <img src={project.cover} alt={project.coverAlt} loading="lazy" />
+    ) : (
+      <div class="placeholder" role="img" aria-label="Project image coming soon">
+        Image coming soon
+      </div>
+    )
+  }
+
+  <dl class="details">
+    {project.details.map(([label, value]) => (
+      <>
+        <dt>{label}</dt>
+        <dd>{value}</dd>
+      </>
+    ))}
+  </dl>
+
+  {project.description.map((paragraph) => <p>{paragraph}</p>)}
+</article>

@@ -1,0 +1,38 @@
+---
+import Base from "../layouts/Base.astro";
+import { projects } from "../data/projects.js";
+
+const featured = projects.slice(0, 2);
+---
+<Base title="Connie Trinh">
+  <section class="page-intro">
+    <h1>Connie Trinh</h1>
+    <p class="lead">
+      I design public space and infrastructure that hold up under climate pressure and serve the people who use them.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet. Replace this with two or three sentences on your current role, the kinds of projects you take on, and what you are looking for next.
+    </p>
+  </section>
+
+  <section>
+    <h2>Selected work</h2>
+    <ul class="section-list">
+      {featured.map((project) => (
+        <li>
+          <a href={`/work/${project.slug}`}>{project.title}</a>
+          <span class="muted">: {project.summary}</span>
+        </li>
+      ))}
+    </ul>
+    <p><a href="/work">All work</a></p>
+  </section>
+
+  <section>
+    <h2>Writing</h2>
+    <p>
+      I write on <a href="https://conibons.substack.com">Substack</a> about the ideas and projects I am following.
+    </p>
+    <p><a href="/writing">Recent posts</a></p>
+  </section>
+</Base>

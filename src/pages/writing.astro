@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+
+const substack = "https://conibons.substack.com";
+
+// Update this list when you publish. Use free posts only, since subscriber-only posts are not visible to visitors.
+// Replace the placeholder titles and dates with real ones. Link each post to its own Substack URL.
+const posts = [
+  { title: "Post title one", date: "Month YYYY", summary: "One sentence describing the post.", url: substack },
+  { title: "Post title two", date: "Month YYYY", summary: "One sentence describing the post.", url: substack },
+  { title: "Post title three", date: "Month YYYY", summary: "One sentence describing the post.", url: substack },
+];
+---
+<Base title="Writing | Connie Trinh" description="Recent writing by Connie Trinh.">
+  <section class="page-intro">
+    <h1>Writing</h1>
+    <p>Notes on the ideas I am working through. Posts are published on Substack.</p>
+  </section>
+
+  <ul class="section-list">
+    {posts.map((post) => (
+      <li>
+        <p class="eyebrow">{post.date}</p>
+        <h2 style="margin:0 0 .25rem;font-size:1.1875rem;">
+          <a href={post.url}>{post.title}</a>
+        </h2>
+        <p class="muted" style="margin:0">{post.summary}</p>
+      </li>
+    ))}
+  </ul>
+
+  <p style="margin-top:2rem">
+    <a class="button" href={substack}>Read and subscribe on Substack</a>
+  </p>
+</Base>
